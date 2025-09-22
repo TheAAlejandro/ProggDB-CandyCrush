@@ -18,7 +18,6 @@ public class PotchiCandy{
     }
 
     public void drawPotchi(Graphics2D g2d){
-
         // Create a shadow of the potchi candy
         int shadowOffsetX = 3;
         int shadowOffsetY = 5;

@@ -17,7 +17,6 @@ public class YemaCandy{
     }
 
     public void drawYema(Graphics2D g2d){
-
         // Add shadow to the yema candy
         g2d.setColor(new Color(0, 0, 0, 50));
         Rectangle2D.Double shadow = new Rectangle2D.Double(x - size/3, y - size/8, size - size/3, size - size/4); 

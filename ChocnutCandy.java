@@ -1,19 +1,15 @@
 import java.awt.*;
 import java.awt.geom.*;
 
-public class ChocnutCandy{
-    private double x;
-    private double y;
-    private double size;
+public class ChocnutCandy extends GameShape {
     private int lineSpacing = 20;
 
-    public ChocnutCandy(double x, double y, double size){
-        // Initialize position as the center of the lala candy
-        this.x = x;
-        this.y = y;
-        this.size = size;
+    public ChocnutCandy(double x, double y, double size) {
+        super(x, y, size, 3);
     }
-    public void drawChocnut(Graphics2D g2d){
+
+    @Override
+    public void draw(Graphics2D g2d) {
         // Add shadow to the chocnut candy
         g2d.setColor(new Color(72, 38, 18));
         Rectangle2D.Double chocnutShadow = new Rectangle2D.Double(x - size + size/4 - 4, y - size + size/2, 1 * size + 5, 0.5 * size + 3);

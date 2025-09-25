@@ -2,22 +2,17 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.Random;
 
-public class PotchiCandy{
-    private double x;
-    private double y;
-    private double size;
-    private Color color;
-    private int sugarCount = 500;  // number of sugar dots
+public class PotchiCandy extends GameShape {
     private Random rand = new Random();
+    private int sugarCount = 500;
 
-    public PotchiCandy(double x, double y, double size){
-        // Initialize position as the center of the potchi
-        this.x = x;
-        this.y = y;
-        this.size = size;
+    public PotchiCandy(double x, double y, double size) {
+        super(x, y, size, 0);
     }
 
-    public void drawPotchi(Graphics2D g2d){
+    @Override
+    public void draw(Graphics2D g2d) {
+
         // Create a shadow of the potchi candy
         int shadowOffsetX = 3;
         int shadowOffsetY = 5;
@@ -60,14 +55,14 @@ public class PotchiCandy{
         g2d.setColor(Color.WHITE);
         Rectangle bounds = candyShape.getBounds();
         for (int i = 0; i < sugarCount; i++) {
-            int x, y;
+            int sx, sy;
             do {
-                x = bounds.x + rand.nextInt(bounds.width);
-                y = bounds.y + rand.nextInt(bounds.height);
-            } while (!candyShape.contains(x, y));
+                sx = bounds.x + rand.nextInt(bounds.width);
+                sy = bounds.y + rand.nextInt(bounds.height);
+            } while (!candyShape.contains(sx, sy));
 
             // draw small sugar dot
-            g2d.fill(new Ellipse2D.Double(x, y, 1, 1)); 
+            g2d.fill(new Ellipse2D.Double(sx, sy, 1, 1)); 
         }
 
         // Merge the above area to the bottom part to create the outline of potchi

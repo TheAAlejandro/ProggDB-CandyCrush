@@ -1,27 +1,20 @@
 import java.awt.*;
 import java.awt.geom.*;
 
-public class hawHawCandy{
-    private double x;
-    private double y;
-    private double size;
-    private int dx;
-    private int dy;
-    private int arcLeft;
-    private int arcRight;
+public class hawHawCandy extends GameShape {
+    private int lineSpacing = 20;
+    
+    private int dx = (int)(0.06 * size);
+    private int dy = (int)(0.06 * size);
+    private int arcLeft = (int)(0.25 * size);
+    private int arcRight = (int)(0.25 * size);
 
-    public hawHawCandy(double x, double y, double size){
-        // Initialize position as the center of the potchi
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.dx = (int)(0.06 * size);
-        this.dy = (int)(0.06 * size);
-        this.arcLeft = (int)(0.25 * size);
-        this.arcRight = (int)(0.25 * size);
+    public hawHawCandy(double x, double y, double size) {
+        super(x, y, size, 5);
     }
 
-    public void drawHawHaw(Graphics2D g2d){
+    @Override
+    public void draw(Graphics2D g2d) {
         // Translate first the points
         g2d.translate(x - size/4 - size/8, y - size + size/4);
 

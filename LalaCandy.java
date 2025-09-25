@@ -1,20 +1,15 @@
 import java.awt.*;
 import java.awt.geom.*;
 
-public class LalaCandy{
-    private double x;
-    private double y;
-    private double size;
-    private int lineSpacing = 15;
+public class LalaCandy extends GameShape {
+    private int lineSpacing = 12;
 
-    public LalaCandy(double x, double y, double size, int lineSpacing){
-        // Initialize position as the center of the lala candy
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.lineSpacing = lineSpacing;
+    public LalaCandy(double x, double y, double size) {
+        super(x, y, size, 2);
     }
-    public void drawLala(Graphics2D g2d){
+
+    @Override
+    public void draw(Graphics2D g2d) {
         // Add shadow to the lala candy
         g2d.setColor(Color.BLACK);
         Rectangle2D.Double shadow = new Rectangle2D.Double(x - size + size/4 - 1.5, y - size + size/2 + 1, 1 * size + 2, 0.5 * size + 2);

@@ -1,22 +1,17 @@
 import java.awt.*;
 import java.awt.geom.*;
 
-public class YemaCandy{
-    private double x;
-    private double y;
-    private double size;
+public class YemaCandy extends GameShape {
     private Color color;
     private int dx = 7;
     private int dy = 10;
 
-    public YemaCandy(double x, double y, double size){
-        // Initialize position as the center of the potchi
-        this.x = x;
-        this.y = y;
-        this.size = size;
+    public YemaCandy(double x, double y, double size) {
+        super(x, y, size, 1);
     }
 
-    public void drawYema(Graphics2D g2d){
+    @Override
+    public void draw(Graphics2D g2d) {
         // Add shadow to the yema candy
         g2d.setColor(new Color(0, 0, 0, 50));
         Rectangle2D.Double shadow = new Rectangle2D.Double(x - size/3, y - size/8, size - size/3, size - size/4); 

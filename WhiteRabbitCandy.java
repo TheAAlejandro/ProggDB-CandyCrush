@@ -1,21 +1,15 @@
 import java.awt.*;
 import java.awt.geom.*;
 
-public class WhiteRabbitCandy{
-    private double x;
-    private double y;
-    private double size;
-    private int dx;
+public class WhiteRabbitCandy extends GameShape{
+    private int dx = (int)(0.07 * size);
 
-    public WhiteRabbitCandy(double x, double y, double size){
-        // Initialize position as the center of the potchi
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.dx = (int)(0.07 * size);
+    public WhiteRabbitCandy(double x, double y, double size) {
+        super(x, y, size, 6);
     }
 
-    public void drawWhiteRabbit(Graphics2D g2d){
+    @Override
+    public void draw(Graphics2D g2d) {
         // Define absolute positions for shapes 
         Ellipse2D.Double leftEllipse = new Ellipse2D.Double(x - size + size/2 - dx, y - size + size/2, 0.15 * size, 0.5 * size);
         Rectangle2D.Double whiteRabbitBase = new Rectangle2D.Double(x - size + size/2, y - size + size/2, 0.9 * size, 0.5 * size);

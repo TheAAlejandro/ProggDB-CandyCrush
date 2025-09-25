@@ -2,22 +2,18 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
 
-public class PolvoronCandy{
-    private double x;
-    private double y;
-    private double size;
+public class PolvoronCandy extends GameShape {
     private double dx = 5;
     private double dy = 5;
     private double toppingsCount = 800;
     private Random rand = new Random();
 
-    public PolvoronCandy(double x, double y, double size){
-        // Initialize position as the center of the lala candy
-        this.x = x;
-        this.y = y;
-        this.size = size;
+    public PolvoronCandy(double x, double y, double size) {
+        super(x, y, size, 4);
     }
-    public void drawPolvoron(Graphics2D g2d){
+
+    @Override
+    public void draw(Graphics2D g2d) {
         // Translate first
         g2d.translate(x - size/2, y - size + size/4);
 
@@ -51,18 +47,18 @@ public class PolvoronCandy{
         Color[] sugarColors = { new Color(145, 123, 115), new Color(99, 84, 79)}; 
 
         for (int i = 0; i < toppingsCount; i++) {
-            int x, y;
+            int sx, sy;
             do {
-                x = bounds.x + rand.nextInt(bounds.width);
-                y = bounds.y + rand.nextInt(bounds.height);
-            } while (!polvoronBody.contains(x, y));
+                sx = bounds.x + rand.nextInt(bounds.width);
+                sy = bounds.y + rand.nextInt(bounds.height);
+            } while (!polvoronBody.contains(sx, sy));
 
             // Pick a random color
             Color sugarColor = sugarColors[rand.nextInt(sugarColors.length)];
             g2d.setColor(sugarColor);
 
             // Draw small toppings
-            g2d.fill(new Ellipse2D.Double(x, y, 1, 1));
+            g2d.fill(new Ellipse2D.Double(sx, sy, 1, 1));
         }
     }
 }

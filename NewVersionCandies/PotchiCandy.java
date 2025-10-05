@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// Main constructor to build the Potchi candy
 public class PotchiCandy extends DrawingObject {
     private double size;
     private int sugarCount = 300; // number of sugar dots
     private Random rand = new Random();
-    private List<DrawingObject> potchiParts = new ArrayList<>(); //arraylist where we will store all the parts of potchi
+    private List<DrawingObject> potchiParts = new ArrayList<>(); // parts of the candy
     private Ellipse bottomPart, topPart;
+    private List<Point> sugarBits = new ArrayList<>(); // store sugar positions
 
     public PotchiCandy(int x, int y, double size) {
         super(
@@ -28,71 +28,87 @@ public class PotchiCandy extends DrawingObject {
     private void buildCandy() {
         int shadowOffsetX = (int)(size * 0.06);
         int shadowOffsetY = (int)(size * 0.1);
-        
-        // Add the Shadow to our container
+
+        // Shadow
         Ellipse shadow = new Ellipse(
-                    (int)(x - size/2 - 2*shadowOffsetX),
-                    (int)(y - size/2 + 2*shadowOffsetY),
-                    (int)(size - size/16), (int)(size - size/3),
-                    new Color[]{new Color(0, 0, 0, 50)}, false, false, 
-                    null, 0,
-                    false, false, false, 0,0,0,0,0f);
+            (int)(x - size/2 - 2*shadowOffsetX),
+            (int)(y - size/2 + 2*shadowOffsetY),
+            (int)(size - size/16), (int)(size - size/3),
+            new Color[]{new Color(0, 0, 0, 50)}, false, false,
+            null, 0,
+            false, false, false, 0,0,0,0,0f
+        );
         potchiParts.add(shadow);
 
-        // Define the bottom part of our candy
+        // Bottom
         bottomPart = new Ellipse(
             (int)(x - size/2), (int)(y - size/2 + size/16),
             (int)(size - size/8), (int)(size - size/3),
-            new Color[]{Color.WHITE}, false, false, null, 0f, false, false, false,
-            0,0,0,0,0f);
+            new Color[]{Color.WHITE}, false, false, null, 0f,
+            false, false, false, 0,0,0,0,0f
+        );
         potchiParts.add(bottomPart);
 
-        // Define the top part of our candy
+        // Top
         topPart = new Ellipse(
             (int)(x - size/2), (int)(y - size/2 - size/64),
             (int)(size - size/8), (int)(size - size/3),
             new Color[]{new Color(255,182,193), new Color(227,110,111)}, true,
             true, null, 0f, false, false, true,
-            0,0,0,0,(float)(5*size));
+            0,0,0,0,(float)(5*size)
+        );
         potchiParts.add(topPart);
+
+        // Generate sugar bits once for the combined shape
+        Area candyShape = new Area(bottomPart.getShape());
+        candyShape.add(new Area(topPart.getShape()));
+        generateSugarBits(candyShape);
     }
 
-        // Draw the candy parts and we will clip everything later
-        @Override
-        public void draw(Graphics2D g2d){
-            // Draw shadow & base first
-            for (DrawingObject obj : potchiParts) {
-                obj.draw(g2d);}
+    // Precompute sugar coordinates inside the given shape
+    private void generateSugarBits(Shape candyShape) {
+        sugarBits.clear();
+        Rectangle2D bounds = candyShape.getBounds2D();
 
-        // Clip the top part first so that we could draw the sugar bits on top of the candy
+        for (int i = 0; i < sugarCount; i++) {
+            int sx, sy;
+            int attempts = 0;
+            do {
+                sx = (int)(bounds.getX() + rand.nextInt(Math.max(1, (int)bounds.getWidth())));
+                sy = (int)(bounds.getY() + rand.nextInt(Math.max(1, (int)bounds.getHeight())));
+                attempts++;
+            } while (!candyShape.contains(sx, sy) && attempts < 100);
+
+            sugarBits.add(new Point(sx, sy));
+        }
+    }
+
+    // Draw the candy
+    @Override
+    public void draw(Graphics2D g2d) {
+        // Draw shadow & base first
+        for (DrawingObject obj : potchiParts) {
+            obj.draw(g2d);
+        }
+
+        // Clip to candy shape (bottom + top combined)
         Area candyShape = new Area(bottomPart.getShape());
         candyShape.add(new Area(topPart.getShape()));
         Shape oldClip = g2d.getClip();
-
-        // Clip to candy shape so sugar dots are contained
         g2d.setClip(candyShape);
 
-        // Scatter sugar bits
-        Rectangle2D bounds = candyShape.getBounds2D();
+        // Draw precomputed sugar bits
         g2d.setColor(Color.WHITE);
-        for (int i = 0; i < sugarCount; i++) {
-                    int sx, sy;
-                    int attempts = 0;
-                    do {
-                        sx = (int)(bounds.getX() + rand.nextInt(Math.max(1, (int)bounds.getWidth())));
-                        sy = (int)(bounds.getY() + rand.nextInt(Math.max(1, (int)bounds.getHeight())));
-                        attempts++;
-                    } while (!candyShape.contains(sx, sy) && attempts < 100);
-                    g2d.fill(new Ellipse2D.Double(sx, sy, 1, 1));
-                }
-         
+        for (Point p : sugarBits) {
+            g2d.fill(new Ellipse2D.Double(p.x, p.y, 1, 1));
+        }
+
         // Restore clip
         g2d.setClip(oldClip);
 
-        // --- Outline around full candy ---
+        // Outline around full candy
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(0.5f));
         g2d.draw(candyShape);
-
     }
 }
